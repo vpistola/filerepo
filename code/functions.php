@@ -85,6 +85,25 @@ function fetchDataAsDropDown()
 
 
 
+function fetchDataById($id_ref)
+{
+    global $pdo;
+    $row = array();
+    $id = $id_ref;
+    $sql= "SELECT Id, Title, Description, 3durl1 as Threedurl1, 3durl2 as Threedurl2, AdditionalInfoUrl, Option1, Option2 FROM Data WHERE Id=:id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+
+    try {
+        $stmt->execute();
+        $row = $stmt->fetch();
+    } catch (PDOException $err) {
+        echo $err->getMessage();
+    }
+    
+    return $row;
+}
+
 
 function fetchData() 
 {

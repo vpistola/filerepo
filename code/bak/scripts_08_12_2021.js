@@ -13,20 +13,95 @@
 //Disabling autoDiscover
 //Dropzone.autoDiscover = false;
 
+uploader = $('#uploadFrm');
+
+Dropzone.options.uploadForm = { // The camelized version of the ID of the form element
+    url: "actions.php",
+    //paramName: "imgs",
+    uploadMultiple: true,
+    maxFilesize: 10,
+    maxFiles: 10,
+    acceptedFiles: "image/jpeg,image/jpg,image/png,application/pdf,application/doc,application/docx",
+    autoProcessQueue: false,
+    addRemoveLinks: true,
+  
+    // The setting up of the dropzone
+    init: function() {
+        var myDropzone = this;
+  
+        //First change the button to actually tell Dropzone to process the queue.
+        this.element.querySelector("button[type=submit]").addEventListener("click", function(e) {
+            // Make sure that the form isn't actually being sent.
+            console.log(uploader);
+            e.preventDefault();
+            e.stopPropagation();
+            myDropzone.processQueue();
+        });
+
+        // this.element.querySelector(".upload_images").addEventListener("click", function(e) {
+        //     // Make sure that the form isn't actually being sent.
+        //     console.log(uploader);
+        //     e.preventDefault();
+        //     e.stopPropagation();
+        //     myDropzone.processQueue();
+        // });
+
+        
+        // this.element.querySelector(".upload_files").addEventListener("click", function(e) {
+        //     // Make sure that the form isn't actually being sent.
+        //     console.log(uploader);
+        //     e.preventDefault();
+        //     e.stopPropagation();
+        //     myDropzone.processQueue();
+        // });
+
+        // $("button.upload1", uploader).click(
+        //     function (e) {
+        //         console.log(uploader);
+        //         e.preventDefault();
+        //         myDropzone.processQueue();
+        //     }
+        // );
+  
+        // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+        // of the sending event because uploadMultiple is set to true.
+        this.on("sendingmultiple", function() {
+        // Gets triggered when the form is actually being sent.
+        // Hide the success button or the complete form.
+        });
+
+        this.on("successmultiple", function(files, response) {
+        // Gets triggered when the files have successfully been sent.
+        // Redirect user or notify of success.
+        });
+
+        this.on("errormultiple", function(files, response) {
+        // Gets triggered when there was an error sending the files.
+        // Maybe show form again, and notify user of error
+        });
+
+        this.on(
+            "success", function (file) {
+                //console.log("success > " + file.name);
+                //console.log(file);
+                //window.location.href = './actions.php';
+            }
+        );
+
+    }   
+}
+
 
 $(function() {
 
     var url = window.location.pathname;
-    var index = url.indexOf('index2'); 
-    var grid = url.indexOf('grid'); 
-    var upload = url.indexOf('upload2'); 
+    var page = url.indexOf('index'); 
 
-    if (index >= 0) {
+    // page = 1 if index found (index.php visited)
+    if (page >= 0) {
         $("#home-nav").addClass("active");
-    } else if (grid >= 0) {
-        $("#grid-nav").addClass("active");
-    } else if (upload >= 0) {
-        $("#upload-nav").addClass("active");
+    } else { // page = -1 if editor.php visited
+        $("#editor-nav").addClass("active");
     }
     
     var fileList = [];
@@ -42,7 +117,7 @@ $(function() {
     $('#upload').click(function() {
         event.preventDefault();    
         const selectedFiles = document.getElementById('formFileMultiple').files;
-        //console.log(selectedFiles);
+        console.log(selectedFiles);
         for (var i = 0; i < selectedFiles.length; i++) {
             const file = selectedFiles[i];
             const fileType = file['type'];
@@ -54,36 +129,42 @@ $(function() {
             }
         }
 
+        var form_data = new FormData();
+        var ins = document.getElementById('formFileMultiple').files.length;
+        console.log(ins);
+        for (var x = 0; x < ins; x++) {
+            form_data.append("files[]", document.getElementById('formFileMultiple').files[x]);
+        }
+
         var json_data = JSON.stringify(fileList.join(";"));
 
         var action = 'upload'; 
         var title = $('#title').val();
         var desc = $('#desc').val();
-        var threedurl1 = $('#3durl1').val();
-        var threedurl2 = $('#3durl2').val();
+        var threedurl = $('#3durl').val();
         var additionalinfourl = $('#additionalinfourl').val();
         var option1 = $('#option1').val();
         var option2 = $('#option2').val();
         var formFileMultiple = json_data;
     
-        var fdata = {
-            action: action,
-            title: title,
-            desc: desc,
-            threedurl1: threedurl1,
-            threedurl2: threedurl2,
-            additionalinfourl: additionalinfourl,
-            option1: option1,
-            option2: option2,
-            formFileMultiple: formFileMultiple
-        };
+        //form_data.append("action", action);
+        form_data.append("title", title);
+        form_data.append("desc", desc);
+        form_data.append("threedurl", threedurl);
+        form_data.append("additionalinfourl", additionalinfourl);
+        form_data.append("option1", option1);
+        form_data.append("option2", option2);
+        form_data.append("formFileMultiple", formFileMultiple);
     
-        console.log(fdata);
         $.ajax({
             type: "POST",
-            enctype: 'multipart/form-data',
-            url: "./actions2.php",
-            data: fdata,
+            url: "./actions.php",
+            dataType: 'text',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form_data,
+            type: 'post',
             success: function ( response ) {
                 $('#msg').html(response);
                 //window.location.reload();
@@ -116,7 +197,6 @@ $(function() {
 		})
 	});	
 
-    
 
     $(document).on('click', '.update', function(){
 		var id = $(this).attr("id");
@@ -170,25 +250,6 @@ $(function() {
 	});	
 
     //$('#modal').modal('toggle');
-
-    function populate_filelist() {
-        const selectedFiles = document.getElementById('formFileMultiple').files;
-        //console.log(selectedFiles);
-        var filelist = $('#filelist');
-        var html = 'Selected Files : ' + "<br/>";
-        for(let i = 0; i < selectedFiles.length; i++) {
-            el = selectedFiles[i];
-            html += (i + 1) + ". " + el.name + "<br/>";
-        }
-        filelist.html(html);
-        filelist.css('font-size', '14px');
-        filelist.css('font-weight', 'bold');
-        filelist.css('font-style', 'italic');
-    }
-
-    $('#formFileMultiple').on('change', function() {
-        populate_filelist();
-    });
 
 
 

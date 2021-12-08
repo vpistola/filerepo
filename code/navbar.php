@@ -5,7 +5,8 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul id="menu" class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link" id="home-nav" aria-current="page" href="index.php">Home</a></li>
-                <li class="nav-item"><a class="nav-link" id="editor-nav" aria-current="page" href="upload.php">Upload</a></li>
+                <li class="nav-item"><a class="nav-link" id="grid-nav" aria-current="page" href="grid.php">View Records</a></li>
+                <li class="nav-item"><a class="nav-link" id="upload-nav" aria-current="page" href="upload.php">Upload</a></li>
                 <li class="nav-item"><a class="nav-link" href="api.php">FetchAPI</a></li>
                 <?php
                 if ($loggedin) {

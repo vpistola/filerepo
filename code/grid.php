@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'header.php'; 
+require_once 'functions.php';
 
 if (isset($_SESSION['user']) && !empty($_SESSION['user']))
 {
@@ -37,76 +38,10 @@ _END;
                     <p class="lead">File List</p> -->
                 </div>
             
-                <?php
-            
-            include_once 'functions.php';
-            $html = "";
-            
-            if($result = fetchData()){
-                foreach ($result as $row) {
-                    $id = $row['Id'];
-                    $file_paths = array();
-                    $image_paths = array();
-
-                    $dfiles = fetchDataFiles($id);
-                    //var_dump($dfiles);
-                    // if ($row['JsonDataText']) {
-                    //     $file_names = $row['JsonDataText'];
-                    //     $file_paths = explode(";", $file_names);
-                    // }
-                    
-                    // if ($row['JsonDataImages']) {
-                    //     $image_names = $row['JsonDataImages'];
-                    //     $image_paths = explode(";", $image_names);
-                    // }
-                    //print_r($file_paths);
-                    // $pdf_ext = strpos($file_names, '.pdf');
-                    // $doc_ext = strpos($file_names, '.doc');
-                    // $jpeg_ext = strpos($image_names, '.jpeg');
-                    // $png_ext = strpos($image_names, '.png');
-                    
-                    $html .= "<div class='card' style='width: 40rem;'>
-                    <div class='card-body'>
-                    <h5 class='card-title'>Id : " . $id . " Title : " . $row['Title'] . "</h5>
-                    <p class='card-text'>" . $row['Description'] . "</p>";
-
-                    // var_dump($dfiles);
-                    foreach($dfiles as $file) {
-                        $f = $file['JsonData'];
-                        if (strpos($f, '.pdf') || strpos($f, '.doc') || strpos($f, '.docx')) {
-                            $html .= "
-                            File : ". pathinfo($f, PATHINFO_FILENAME) ."." . pathinfo($f, PATHINFO_EXTENSION) . " <a href='" . $f . "' class='btn btn-outline-secondary'>View</a><br>
-                            ";
-                        } else {
-                            $html .= "
-                            <img src='" . $f . "' class='card-img-top'></a>
-                            Image : ". pathinfo($f, PATHINFO_FILENAME) ."." . pathinfo($f, PATHINFO_EXTENSION) . " <a href='" . $f . "' class='btn btn-outline-secondary'>View</a><br>
-                            ";
-                        }
-                        
-                    }
-
-                    $html .= "
-                    <p class='card-text'> 3D-URL-1 : " . $row['3durl1'] . "</p>
-                    <p class='card-text'> 3D-URL-2 : " . $row['3durl2'] . "</p>
-                    </div>
-                    </div>
-                    <hr>
-                    ";
-
-                }
-            }
-            
-            echo $html;
-            ?>
-
-
-            <table id="example" class="stripe" style="width:100%">
 
             <?php
-
-            include_once 'functions.php';
-
+            
+            echo "<table id='example' class='stripe' style='width:100%'>";
             echo "<thead>";
             echo "<tr>";
             echo "<th>#</th>";
@@ -218,7 +153,9 @@ _END;
                 </form>
             </div>
             </div>
-            <?php include 'footer.php' ?>
+            
+            <?php //include 'footer.php' ?>
+        
         </div>
         <?php 
         } else {
@@ -238,5 +175,11 @@ _END;
         <script src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
         <!-- <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script> -->
         
+        <script>
+            $(document).on('click', '.update', function () {
+                var id = $(this).attr("id");
+                window.location.href = './grid_details.php?id=' + id;
+            });
+        </script>
     </body>
 </html>

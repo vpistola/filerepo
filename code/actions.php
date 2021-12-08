@@ -1,6 +1,10 @@
 <?php
     require_once "functions.php"; 
 
+	if(!empty($_POST['action']) && $_POST['action'] == 'upload') {
+		echo a();
+	}
+
     if(!empty($_POST['action']) && $_POST['action'] == 'fetch') {
 		fetch();
 	}
@@ -30,8 +34,7 @@
 	}
 
 
-	if (isset($_FILES['file']) && !empty($_FILES['file'])) 
-	{
+	function a() {
 		$allowed_images = array('png', 'jpg');
 		$allowed_files = array('pdf', 'doc', 'docx');
 		$upload_files = array();
@@ -39,20 +42,20 @@
 
 		$title = $_POST['title'];
 		$desc = $_POST['desc'];
-		$threedurl1 = $_POST['3durl1'];
-		$threedurl2 = $_POST['3durl2'];
+		$threedurl1 = $_POST['threedurl1'];
+		$threedurl2 = $_POST['threedurl2'];
 		$additionalinfourl = $_POST['additionalinfourl'];
         $option1 = $_POST['option1'];
 		$option2 = $_POST['option2'];
 		$files = $_POST['formFileMultiple'];
-
-		//$data_id = insert_data($title, $desc, $threedurl1, $threedurl2, $additionalinfourl, $option1, $option2);
 		
-		//$f : array(1) { [0]=> array(2) { [0]=> string(17) "Vourvoukeli_3.JPG" [1]=> string(17) "Vourvoukeli_4.JPG" } }
-		$f = $files; //array_filter([$_FILES['file']['name']]);
-		echo $f;
 
-		foreach($f[0] as $fh) {
+		$data_id = insert_data($title, $desc, $threedurl1, $threedurl2, $additionalinfourl, $option1, $option2);
+		$f = array();
+		$f = explode(";", json_decode($files)); //array_filter([$_FILES['file']['name']]);
+
+
+		foreach($f as $fh) {
 			$ext = pathinfo($fh, PATHINFO_EXTENSION);
 			if (in_array($ext, $allowed_files)) {
 				array_push($upload_files, $fh);
@@ -61,25 +64,28 @@
 			}
 		}
 
-		//$upload_files_processed = implode(";", array_map('add_const_to_string', $upload_files));
-		//$upload_images_processed = implode(";", array_map('add_const_to_string', $upload_images));
-
+		// var_dump($upload_files);
+		// echo "<br/>";
+		// var_dump($upload_images);
+		// echo "<br/>";
+	
 		$upload_files_processed = array_map('add_const_to_string', $upload_files);
 		$upload_images_processed = array_map('add_const_to_string', $upload_images);
 
-		//var_dump($upload_files);
-		//var_dump($upload_images);
+		// var_dump($upload_files_processed);
+		// echo "<br/>";
+		// var_dump($upload_images_processed);
 		
 		foreach($upload_files_processed as $file)
 		{
 			//var_dump($file);
-			//insert_data_files($data_id, 1, $file);
+			insert_data_files($data_id, 1, $file);
 		}
 
 		foreach($upload_images_processed as $image)
 		{
 			//var_dump($image);
-			//insert_data_files($data_id, 2, $image);
+			insert_data_files($data_id, 2, $image);
 		}
 
 		// $f[0] : { [0]=> string(17) "Vourvoukeli_3.JPG" [1]=> string(17) "Vourvoukeli_4.JPG" }
@@ -87,29 +93,20 @@
 		// $files = implode(";", $files0);
 		// //upload($title, $desc, $threedurl1, $threedurl2, $additionalinfourl, $option1, $option2, process_filename($files));
 		
-		echo $no_files = count($_FILES["file"]['name']);
-		// for ($i = 0; $i < $no_files; $i++) {
-		// 	$tmpname = process_filename($_FILES["file"]["tmp_name"][$i]);
-		// 	$name = process_filename($_FILES["file"]["name"][$i]);
-		// 	if ($_FILES["file"]["error"][$i] > 0) {
-		// 		echo "Error: " . $_FILES["file"]["error"][$i] . "<br>";
-		// 	} else {
-		// 		if (file_exists('uploads/' . $name)) {
-		// 			echo 'File already exists : uploads/' . $_FILES["file"]["name"][$i];
-		// 		} else {
-		// 			//array_push($json_data, $name);
-		// 			move_uploaded_file($tmpname, 'uploads/' . $name);
-		// 			echo 'File successfully uploaded : uploads/' . $name . ' ';
-		// 		}
-		// 	}
-		// }
-		//echo upload($title, $desc, $threedurl1, $threedurl2, $additionalinfourl, $option1, $option2, process_filename($upload_files_processed), process_filename($upload_images_processed));
-		
-	} else if (empty($_POST['action'])){
-		echo 'Please choose at least one file';
+		$no_files = count($f);
+		for ($i = 0; $i < $no_files; $i++) {
+			$tmpname = $f[$i];
+			$name = $f[$i];
+			if (file_exists('uploads/' . $name)) {
+				echo 'File already exists : uploads/' . $f[$i];
+			} else {
+				move_uploaded_file($tmpname, 'uploads/' . $name);
+				echo 'File successfully uploaded : uploads/' . $name . ' ';
+			}
+		}
 	}
 
-
+	
 	function add_const_to_string($str)
 	{
 		return 'uploads/' . $str;
@@ -138,6 +135,25 @@
 		}
 
 		echo json_encode($result);
+	}
+
+
+	function fetchById($id)
+	{
+		global $pdo;
+		$row = array();
+		$sql= "SELECT Id, Title, Description, 3durl1 as Threedurl1, 3durl2 as Threedurl2, AdditionalInfoUrl, Option1, Option2 FROM Data WHERE Id=:id";
+		$stmt = $pdo->prepare($sql);
+		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+
+		try {
+			$stmt->execute();
+			$row = $stmt->fetch();
+		} catch (PDOException $err) {
+			echo $err->getMessage();
+		}
+
+		echo json_encode($data);
 	}
 
 
@@ -183,7 +199,7 @@
 		$stmt = $pdo->prepare($sql);
 		$stmt->bindParam(":dataid", $dataid, PDO::PARAM_INT);
 		$stmt->bindParam(":typeid", $typeid, PDO::PARAM_INT);
-		$stmt->bindParam(":uploadedfile", $uploadedfile, PDO::PARAM_STR);
+		$stmt->bindParam(":uploadedfile", $file, PDO::PARAM_STR);
 
 		try {
 			$stmt->execute();
@@ -211,58 +227,5 @@
 	}
 
 	//===================================================================================
-
-
-	// function fetch()
-	// {
-	// 	global $connection;
-	// 	$sql= "SELECT * FROM Data";
-	// 	$result = mysqli_query($connection, $sql);	
-	// 	$data= array();
-	// 	while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-	// 		$data[]=$row;            
-	// 	}
-	// 	echo json_encode($data);
-	// }
-
-	// function fetchById($id)
-	// {
-	// 	global $connection;
-	// 	$sql= "SELECT Id, Title, Description, 3durl1 as Threedurl1, 3durl2 as Threedurl2, AdditionalInfoUrl, Option1, Option2, JsonDataText, JsonDataImages FROM Data WHERE Id=$id";
-	// 	$result = mysqli_query($connection, $sql);	
-	// 	$data= array();
-	// 	while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-	// 		$data[]=$row;            
-	// 	}
-	// 	echo json_encode($data);
-	// }
-
-
-	// function upload($title, $desc, $threedurl1, $threedurl2, $additionalinfourl, $option1, $option2, $name, $name2)
-	// {
-	// 	global $connection;
-	// 	$sql = "INSERT INTO Data(Title, Description, 3durl1, 3durl2, AdditionalInfoUrl, Option1, Option2, JsonDataText, JsonDataImages) VALUES('$title', '$desc', '$threedurl1', '$threedurl2', '$additionalinfourl', '$option1', '$option2', '$name', '$name2')";
-	// 	mysqli_query($connection, $sql) or die(mysqli_error($connection));
-	// }
-
-
-
-	// function update($id, $title, $desc, $threedurl1, $threedurl2, $additionalinfourl, $option1, $option2)
-	// {
-	// 	global $connection;
-	// 	$sql = "UPDATE Data SET Title = '$title', Description = '$desc', 3durl1 = '$threedurl1', 3durl2 = '$threedurl2', AdditionalInfoUrl = '$additionalinfourl', Option1 = $option1, Option2 = $option2 WHERE Id = $id";
-	// 	mysqli_query($connection, $sql) or die(mysqli_error($connection));
-	// }
-
-
-	// function deleteById($id){
-	// 	global $connection;
-		
-	// 	if($id) {
-	// 		$sql = "DELETE FROM Data WHERE Id = $id";		
-	// 		mysqli_query($connection, $sql);		
-	// 	}
-	// }
-
 
 ?>

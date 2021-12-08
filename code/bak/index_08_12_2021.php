@@ -37,38 +37,47 @@ _END;
                     <p class="lead">File List</p> -->
                 </div>
             
-                <?php
+            <?php
             
             include_once 'functions.php';
             $html = "";
             
             if($result = fetchData()){
                 foreach ($result as $row) {
-                    $id = $row['Id'];
                     $file_paths = array();
                     $image_paths = array();
 
-                    $dfiles = fetchDataFiles($id);
+                    if ($row['JsonDataText']) {
+                        $file_names = $row['JsonDataText'];
+                        $file_paths = explode(";", $file_names);
+                    }
+                    
+                    if ($row['JsonDataImages']) {
+                        $image_names = $row['JsonDataImages'];
+                        $image_paths = explode(";", $image_names);
+                    }
+                    //print_r($file_paths);
+                    // $pdf_ext = strpos($file_names, '.pdf');
+                    // $doc_ext = strpos($file_names, '.doc');
+                    // $jpeg_ext = strpos($image_names, '.jpeg');
+                    // $png_ext = strpos($image_names, '.png');
                     
                     $html .= "<div class='card' style='width: 40rem;'>
                     <div class='card-body'>
-                    <h5 class='card-title'>Id : " . $id . " Title : " . $row['Title'] . "</h5>
+                    <h5 class='card-title'>" . $row['Title'] . "</h5>
                     <p class='card-text'>" . $row['Description'] . "</p>";
 
-                    // var_dump($dfiles);
-                    foreach($dfiles as $file) {
-                        $f = $file['JsonData'];
-                        if (strpos($f, '.pdf') || strpos($f, '.doc') || strpos($f, '.docx')) {
-                            $html .= "
-                            File : ". pathinfo($f, PATHINFO_FILENAME) ."." . pathinfo($f, PATHINFO_EXTENSION) . " <a href='" . $f . "' class='btn btn-link btn-sm'>View</a><br>
-                            ";
-                        } else {
-                            $html .= "
-                            <img src='" . $f . "' class='card-img-top'></a>
-                            Image : ". pathinfo($f, PATHINFO_FILENAME) ."." . pathinfo($f, PATHINFO_EXTENSION) . " <a href='" . $f . "' class='btn btn-link btn-sm'>View</a><br>
-                            ";
-                        }
-                        
+                    foreach($image_paths as $ipath) {
+                        $html .= "
+                        <img src='" . $ipath . "' class='card-img-top'></a>
+                        Image : ". pathinfo($ipath, PATHINFO_FILENAME) ."." . pathinfo($ipath, PATHINFO_EXTENSION) . " <a href='" . $ipath . "' class='btn btn-outline-secondary'>View</a><br>
+                        ";
+                    }
+
+                    foreach($file_paths as $fpath) {
+                        $html .= "
+                        File : ". pathinfo($fpath, PATHINFO_FILENAME) ."." . pathinfo($fpath, PATHINFO_EXTENSION) . " <a href='" . $fpath . "' class='btn btn-outline-secondary'>View</a><br>
+                        ";
                     }
 
                     $html .= "
@@ -79,14 +88,13 @@ _END;
                     <hr>
                     ";
 
+
                 }
             }
             
             echo $html;
             ?>
-           
-            <?php include 'footer.php' ?>
-       
+
         </div>
         <?php 
         } else {
