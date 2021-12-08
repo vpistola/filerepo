@@ -51,7 +51,22 @@ if (!$loggedin) {
                     data: data,
                     success: function ( response ) {
                         var res = JSON.parse(response);
-                        //console.log(res);
+                        var obj = [];
+
+                        console.log(res);
+                        // res.forEach(function (arrayItem){
+                        //     if (arrayItem.JsonDataText != "") {
+                        //         var jdtext = arrayItem.JsonDataText.split(";");
+                        //         delete arrayItem.JsonDataText;
+                        //         arrayItem.JsonDataText = jdtext;
+                        //     } else if (arrayItem.JsonDataImages != "") {
+                        //         var jdimage = arrayItem.JsonDataImages.split(";");
+                        //         delete arrayItem.JsonDataImages;
+                        //         arrayItem.JsonDataImages = jdimage;
+                        //     }
+                        //     obj.push(arrayItem);
+                        // });
+
                         document.querySelector("#json").appendChild(jsonViewer.getContainer());
                         jsonViewer.showJSON(res);
                     },

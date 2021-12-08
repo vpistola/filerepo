@@ -124,6 +124,7 @@
 	function fetch()
 	{
 		global $pdo;
+		$resp = array();
 		$result = array();
 		$sql= "SELECT * FROM Data";
 		$stmt = $pdo->query($sql);
@@ -134,7 +135,17 @@
 			echo $err->getMessage();
 		}
 
-		echo json_encode($result);
+		foreach($result as $row){
+			//$tmp = array();
+			//$tmp = $row;
+			$id = $row['Id'];
+			$r = fetchDataFiles($id);
+			//array_push($tmp, $r);
+			$merge = array_merge($row, $r);
+			array_push($resp, $merge);
+		}
+		
+		echo json_encode($resp);
 	}
 
 

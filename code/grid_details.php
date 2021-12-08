@@ -198,5 +198,6 @@ if($result = fetchDataById($id)) {
             $('#option2').val(opt2);
         </script>
 
+
     </body>
 </html>
