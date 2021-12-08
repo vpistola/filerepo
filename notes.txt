@@ -1,0 +1,51 @@
+docker run --name api -d -p 8061:5000 registry.gitlab.com/isr-lab/cr/flask
+
+
+CREATE TABLE IF NOT EXISTS Users (
+    Id int not null primary key auto_increment,
+    Username varchar(20),
+    Password varchar(20) 
+) ENGINE=InnoDB COLLATE utf8_general_ci;
+
+
+CREATE TABLE IF NOT EXISTS Data (
+    Id int not null primary key auto_increment,
+    Title varchar(50),
+    Description text,
+    3durl text,
+    AdditionalInfoUrl text,
+    Option1 varchar(30),
+    Option2 varchar(30)
+) ENGINE=InnoDB COLLATE utf8_general_ci;
+
+
+CREATE TABLE IF NOT EXISTS FileType (
+    Id int not null primary key auto_increment,
+    Description varchar(20)
+) 
+
+
+CREATE TABLE IF NOT EXISTS DataFiles (
+    Id int not null primary key auto_increment,
+    DataId int not null,
+    TypeId int not null,
+    JsonData text,
+    CONSTRAINT fk_data_id FOREIGN KEY (DataId)  
+    REFERENCES Data(Id)  
+    ON DELETE CASCADE  
+    ON UPDATE CASCADE,
+    CONSTRAINT fk_filetype_id FOREIGN KEY (TypeId)  
+    REFERENCES FileType(Id)  
+    ON DELETE CASCADE  
+    ON UPDATE CASCADE
+) ENGINE=InnoDB COLLATE utf8_general_ci;
+
+
+<!-- <div class="card" style="width: 18rem;">
+  <img class="card-img-top" src="..." alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">Card title</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div> -->
