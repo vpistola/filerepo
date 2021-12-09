@@ -45,32 +45,49 @@ _END;
             if($result = fetchData()){
                 foreach ($result as $row) {
                     $id = $row['Id'];
-                    $file_paths = array();
-                    $image_paths = array();
+                    $files = array();
+                    $images = array();
 
                     $dfiles = fetchDataFiles($id);
                     
                     $html .= "<div class='container'>
-                    <div class='row'>
                     <h5 class='card-title'>" . $id . ". " . $row['Title'] . "</h5>
                     <p class='card-text'>" . $row['Description'] . "</p>";
+
+                    
 
                     // var_dump($dfiles);
                     foreach($dfiles as $file) {
                         $f = $file['JsonData'];
                         if (strpos($f, '.pdf') || strpos($f, '.doc') || strpos($f, '.docx')) {
-                            $html .= "<div class='col-sm'>
-                            File : ". pathinfo($f, PATHINFO_FILENAME) ."." . pathinfo($f, PATHINFO_EXTENSION) . " <a href='" . $f . "' class='btn btn-link btn-sm'>View</a>
-                            </div>
-                            ";
+                            array_push($files, $f);    
                         } else {
-                            $html .= "<div class='col-sm'>
-                            <img src='" . $f . "' class='card-img-top'></a>
-                            Image : ". pathinfo($f, PATHINFO_FILENAME) ."." . pathinfo($f, PATHINFO_EXTENSION) . " <a href='" . $f . "' class='btn btn-link btn-sm'>View</a>
+                            array_push($images, $f);
+                        }
+                    }
+
+                    if ($images) {
+                        $html .= "<div class='row'>";
+                        foreach($images as $img) {
+                            $html .= "<div class='col'>
+                            <a href='" . $img . "'>
+                            <img src='" . $img . "' class='card-img-top' style='width: 25%' title='". pathinfo($img, PATHINFO_FILENAME) . "." . pathinfo($img, PATHINFO_EXTENSION) . "'>
+                            </a>
                             </div>
                             ";
                         }
-                        
+                        $html .= "</div>";
+                    }
+
+                    if ($files) {
+                        $html .= "<div class='row'>";
+                        foreach($files as $fi) {
+                            $html .= "<div class='col'>
+                            File : ". pathinfo($fi, PATHINFO_FILENAME) ."." . pathinfo($fi, PATHINFO_EXTENSION) . " <a href='" . $fi . "' class='btn btn-light btn-sm'>View</a>
+                            </div>
+                            ";
+                        }
+                        $html .= "</div>";
                     }
 
                     $html .= "
@@ -89,6 +106,7 @@ _END;
            
             <?php include 'footer.php' ?>
        
+            <!-- Image : ". pathinfo($img, PATHINFO_FILENAME) ."." . pathinfo($img, PATHINFO_EXTENSION) . " <a href='" . $img . "' class='btn btn-light btn-sm'>View</a> -->
 
         </div>
        
