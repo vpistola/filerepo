@@ -39,6 +39,65 @@ $(function() {
         $('#modal').modal('hide');
     })
 
+    // $('#upload').click(function() {
+    //     event.preventDefault();    
+    //     const selectedFiles = document.getElementById('formFileMultiple').files;
+    //     //console.log(selectedFiles);
+    //     for (var i = 0; i < selectedFiles.length; i++) {
+    //         const file = selectedFiles[i];
+    //         const fileType = file['type'];
+    //         if (validFileTypes.includes(fileType)) {
+    //             fileList.push(selectedFiles[i].name);
+    //             files.push(selectedFiles[i]);
+    //         } else {
+    //             alert("Only .gif, .jpeg, .png, .pdf, .doc and .docx file extensions are permitted..");
+    //         }
+    //     }
+
+    //     var json_data = JSON.stringify(fileList.join(";"));
+
+    //     var action = 'upload'; 
+    //     var title = $('#title').val();
+    //     var desc = $('#desc').val();
+    //     var threedurl1 = $('#3durl1').val();
+    //     var threedurl2 = $('#3durl2').val();
+    //     var additionalinfourl = $('#additionalinfourl').val();
+    //     var option1 = $('#option1').val();
+    //     var option2 = $('#option2').val();
+    //     var formFileMultiple = json_data;
+    
+    //     var fdata = {
+    //         action: action,
+    //         title: title,
+    //         desc: desc,
+    //         threedurl1: threedurl1,
+    //         threedurl2: threedurl2,
+    //         additionalinfourl: additionalinfourl,
+    //         option1: option1,
+    //         option2: option2,
+    //         formFileMultiple: formFileMultiple
+    //     };
+    
+    //     console.log(fdata);
+    //     $.ajax({
+    //         type: "POST",
+    //         enctype: 'multipart/form-data',
+    //         url: "./base_controller.php",
+    //         data: fdata,
+    //         success: function ( response ) {
+    //             $('#msg').html(response);
+    //             //window.location.reload();
+    //         },
+    //         error: function (response) {
+    //             $('#msg').html(response);
+    //             //console.error(response);
+    //         }
+    //     });
+
+    // });
+
+
+
     $('#upload').click(function() {
         event.preventDefault();    
         const selectedFiles = document.getElementById('formFileMultiple').files;
@@ -54,9 +113,9 @@ $(function() {
             }
         }
 
-        var json_data = JSON.stringify(fileList.join(";"));
 
         var action = 'upload'; 
+        //var id = $('#recordid').val();
         var title = $('#title').val();
         var desc = $('#desc').val();
         var threedurl1 = $('#3durl1').val();
@@ -64,37 +123,45 @@ $(function() {
         var additionalinfourl = $('#additionalinfourl').val();
         var option1 = $('#option1').val();
         var option2 = $('#option2').val();
-        var formFileMultiple = json_data;
+
+        var file_data = $('#formFileMultiple').prop('files');
+        var form_data = new FormData();
+
+        for (const el of file_data) {
+            form_data.append('files[]', el);    
+        }
+
+        form_data.append('action', action);
+        form_data.append('title', title);
+        form_data.append('desc', desc);
+        form_data.append('threedurl1', threedurl1);
+        form_data.append('threedurl2', threedurl2);
+        form_data.append('additionalinfourl', additionalinfourl);
+        form_data.append('option1', option1);
+        form_data.append('option2', option2);
     
-        var fdata = {
-            action: action,
-            title: title,
-            desc: desc,
-            threedurl1: threedurl1,
-            threedurl2: threedurl2,
-            additionalinfourl: additionalinfourl,
-            option1: option1,
-            option2: option2,
-            formFileMultiple: formFileMultiple
-        };
-    
-        console.log(fdata);
+        //console.log(form_data);
+        
         $.ajax({
-            type: "POST",
-            enctype: 'multipart/form-data',
-            url: "./actions2.php",
-            data: fdata,
-            success: function ( response ) {
-                $('#msg').html(response);
-                //window.location.reload();
+            url: './base_controller.php',
+            //dataType: 'text',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form_data,                         
+            type: 'post',
+            success: function(response){
+                console.log(response)
             },
-            error: function (response) {
-                $('#msg').html(response);
-                //console.error(response);
-            }
+            error: function(e) {
+                //$("#err").html(e).fadeIn();
+                console.error(e);
+            }   
         });
 
+
     });
+
 
 
     $(document).on('submit','#formid', function(event){
@@ -103,7 +170,7 @@ $(function() {
 		var formData = $(this).serialize();
         console.log(formData);
 		$.ajax({
-			url:"./actions.php",
+			url:"./base_controller.php",
 			method:"POST",
 			data:formData,
 			success:function(data){				
@@ -123,7 +190,7 @@ $(function() {
         var action = "fetchbyid";
         $('.modal-title').html("<i class='fa fa-plus'></i> Update");
 		$.ajax({
-			url:'./actions.php',
+			url:'./base_controller.php',
 			method:"POST",
 			data:{id:id, action:action},
 			success:function(data){
@@ -157,7 +224,7 @@ $(function() {
 		var action = "delete";
 		if(confirm("Are you sure you want to delete this entry?")) {
 			$.ajax({
-				url:"./actions.php",
+				url:"./base_controller.php",
 				method:"POST",
 				data:{id:id, action:action},
 				success:function(data) {	

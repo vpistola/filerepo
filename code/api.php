@@ -47,9 +47,10 @@ if (!$loggedin) {
 
                 $.ajax({
                     type: "POST",
-                    url: "./actions.php",
+                    url: "./api_controller.php",
                     data: data,
                     success: function ( response ) {
+                        console.log(response);
                         var res = JSON.parse(response);
                         //console.log(res);
                         document.querySelector("#json").appendChild(jsonViewer.getContainer());

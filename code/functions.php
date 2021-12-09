@@ -157,7 +157,65 @@ function fetchDataFiles($id_ref)
 
 
 
+//========================Functions for Data Files========================
+
+function insert_data_files($dataid_ref, $typeid_ref, $file_ref)
+{
+    global $pdo;
+    $dataid = $dataid_ref;
+    $typeid = $typeid_ref;
+    $file = $file_ref;
+    
+    $sql = "INSERT INTO DataFiles(DataId, TypeId, JsonData) VALUES(:dataid, :typeid, :uploadedfile)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(":dataid", $dataid, PDO::PARAM_INT);
+    $stmt->bindParam(":typeid", $typeid, PDO::PARAM_INT);
+    $stmt->bindParam(":uploadedfile", $file, PDO::PARAM_STR);
+
+    try {
+        $stmt->execute();
+        $retid = $pdo->lastInsertId();
+    } catch(PDOException $err) {
+        echo $err->getMessage();
+    }
+
+    return $retid;
+}
+
+function delete_file() 
+{
+    global $pdo;
+    $id = $_POST['id'];
+    $sql = "delete from DataFiles where Id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+
+    try {
+        $stmt->execute();
+    } catch (PDOException $err) {
+        echo $err->getMessage();
+    }
+}
+
+//========================End of Functions for Data Files========================
 
 
+
+
+
+//========================Utilities========================
+function add_const_to_string($str)
+{
+    return 'uploads/' . $str;
+}
+
+
+function process_filename($f) 
+{
+    $f_array = explode(" ", $f);
+    $f_processed = implode("_", $f_array);
+    return $f_processed;
+}
+//========================End of Utilities========================
 
 ?>

@@ -50,24 +50,22 @@ _END;
 
                     $dfiles = fetchDataFiles($id);
                     
-                    $html .= "<div class='container'>
-                    <div class='row'>
-                    <h5 class='card-title'>" . $id . ". " . $row['Title'] . "</h5>
+                    $html .= "<div class='card' style='width: 40rem;'>
+                    <div class='card-body'>
+                    <h5 class='card-title'>Id : " . $id . " Title : " . $row['Title'] . "</h5>
                     <p class='card-text'>" . $row['Description'] . "</p>";
 
                     // var_dump($dfiles);
                     foreach($dfiles as $file) {
                         $f = $file['JsonData'];
                         if (strpos($f, '.pdf') || strpos($f, '.doc') || strpos($f, '.docx')) {
-                            $html .= "<div class='col-sm'>
-                            File : ". pathinfo($f, PATHINFO_FILENAME) ."." . pathinfo($f, PATHINFO_EXTENSION) . " <a href='" . $f . "' class='btn btn-link btn-sm'>View</a>
-                            </div>
+                            $html .= "
+                            File : ". pathinfo($f, PATHINFO_FILENAME) ."." . pathinfo($f, PATHINFO_EXTENSION) . " <a href='" . $f . "' class='btn btn-link btn-sm'>View</a><br>
                             ";
                         } else {
-                            $html .= "<div class='col-sm'>
+                            $html .= "
                             <img src='" . $f . "' class='card-img-top'></a>
-                            Image : ". pathinfo($f, PATHINFO_FILENAME) ."." . pathinfo($f, PATHINFO_EXTENSION) . " <a href='" . $f . "' class='btn btn-link btn-sm'>View</a>
-                            </div>
+                            Image : ". pathinfo($f, PATHINFO_FILENAME) ."." . pathinfo($f, PATHINFO_EXTENSION) . " <a href='" . $f . "' class='btn btn-link btn-sm'>View</a><br>
                             ";
                         }
                         
@@ -89,9 +87,8 @@ _END;
            
             <?php include 'footer.php' ?>
        
-
+           
         </div>
-       
         <?php 
         } else {
             echo "<div></div>";

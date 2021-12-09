@@ -1,5 +1,8 @@
 <?php
     require_once "functions.php"; 
+    
+    $valid_extensions = array('jpeg', 'jpg', 'png', 'pdf' , 'doc' , 'docx'); // valid extensions
+    $path = 'uploads/'; // upload directory
 
 	if(!empty($_POST['action']) && $_POST['action'] == 'save') {
 		echo update();
@@ -10,23 +13,13 @@
 	}
 
     if(!empty($_POST['action']) && $_POST['action'] == 'upload') {
-		echo a();
+		//echo a();
 	}
 
-
-    function add_const_to_string($str)
-	{
-		return 'uploads/' . $str;
-	}
-
-	function process_filename($f) 
-	{
-		$f_array = explode(" ", $f);
-		$f_processed = implode("_", $f_array);
-		return $f_processed;
-	}
 
     
+
+
     function a() {
 		$allowed_images = array('png', 'jpg');
 		$allowed_files = array('pdf', 'doc', 'docx');
@@ -34,8 +27,8 @@
 		$upload_images = array();
 
         $recordid = $_POST['recordid'];
-		$files = $_POST['formFileMultiple'];
-		
+		//$files = $_POST['formFileMultiple'];
+	
 		$f = array();
 		$f = explode(";", json_decode($files)); //array_filter([$_FILES['file']['name']]);
 
@@ -63,19 +56,19 @@
 		foreach($upload_files_processed as $file)
 		{
 			//var_dump($file);
-			insert_data_files($recordid, 1, $file);
+			//insert_data_files($recordid, 1, $file);
 		}
 
 		foreach($upload_images_processed as $image)
 		{
 			//var_dump($image);
-			insert_data_files($recordid, 2, $image);
+			//insert_data_files($recordid, 2, $image);
 		}
 
 		$no_files = count($f);
 		for ($i = 0; $i < $no_files; $i++) {
-			$tmpname = $f[$i];
-			$name = $f[$i];
+			echo $tmpname = $f[$i];
+			echo $name = $f[$i];
 			if (file_exists('uploads/' . $name)) {
 				echo 'File already exists : uploads/' . $f[$i];
 			} else {
@@ -134,47 +127,7 @@
 
 
 
-    //========================Functions for Data Files========================
-
-    function insert_data_files($dataid_ref, $typeid_ref, $file_ref)
-	{
-		global $pdo;
-		$dataid = $dataid_ref;
-		$typeid = $typeid_ref;
-		$file = $file_ref;
-		
-		$sql = "INSERT INTO DataFiles(DataId, TypeId, JsonData) VALUES(:dataid, :typeid, :uploadedfile)";
-		$stmt = $pdo->prepare($sql);
-		$stmt->bindParam(":dataid", $dataid, PDO::PARAM_INT);
-		$stmt->bindParam(":typeid", $typeid, PDO::PARAM_INT);
-		$stmt->bindParam(":uploadedfile", $file, PDO::PARAM_STR);
-
-		try {
-			$stmt->execute();
-			$retid = $pdo->lastInsertId();
-		} catch(PDOException $err) {
-			echo $err->getMessage();
-		}
-
-		return $retid;
-	}
-
-    function delete_file() 
-    {
-        global $pdo;
-        $id = $_POST['id'];
-        $sql = "delete from DataFiles where Id = :id";
-		$stmt = $pdo->prepare($sql);
-        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-
-        try {
-            $stmt->execute();
-        } catch (PDOException $err) {
-            echo $err->getMessage();
-        }
-    }
-
-    //========================End of Functions for Data Files========================
+    
 
 
 ?>

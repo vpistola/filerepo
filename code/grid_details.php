@@ -24,7 +24,7 @@ echo <<< _END
         <div class='text-center mt-5'>
             <p class='lead'>Record details (user : <strong>$user</strong>)</p>
         </div>
-    </div>;
+    </div>
 _END;
 //if ($loggedin) echo " $user, you are logged in";
 //else echo ' please log in';
@@ -39,6 +39,7 @@ if($result = fetchDataById($id)) {
     $active_data = $result;
 }
 
+
 ?>
 
         <?php if($loggedin) { ?>
@@ -48,7 +49,7 @@ if($result = fetchDataById($id)) {
                     <!-- <p class="lead">File List</p> -->
                 </div>
             
-                <form method="POST" enctype="multipart/form-data" id="fileUploadForm">
+                <!-- <form method="POST" enctype="multipart/form-data" id="fileUploadForm"> -->
                 
                 <div class="form-row">
                     <div class="form-group col-md-6" style="margin-bottom: 10px">
@@ -109,17 +110,26 @@ if($result = fetchDataById($id)) {
                 <div class="form-inline col-md-6" style="margin-bottom: 10px">
                     <button type="submit" class="btn btn-outline-secondary" id="save">Save</button>
                 </div>
-            </form>
-            
+
+                <div class="form-inline col-md-6" style="margin-bottom: 10px">
+                    <label for="multiple_file_input" class="form-label">Click bellow to add more files to list</label>
+                    <input class="form-control" type="file" id="multiple_file_input" name="file[]" multiple="multiple"/>
+                </div>    
+
+                <div class="form-inline col-md-6" style="margin-bottom: 10px">
+                    <input type="submit" name="save" id="upld" class="btn btn-outline-secondary" value="Upload" />
+                </div>
+            <!-- </form> -->
+  
             <br/>
             <div class="text-center mt-5">
                 <!-- <h3>Record Details</h3>  -->
                 <p class="lead">File List</p>
             </div>
 
-            <div class="form-inline col-md-6" style="margin-bottom: 10px">
+            <!-- <div class="form-inline col-md-6" style="margin-bottom: 10px">
                 <button type="submit" class="btn btn-outline-secondary" id="add">Add File</button>
-            </div>
+            </div> -->
 
             <?php
 
@@ -148,27 +158,27 @@ if($result = fetchDataById($id)) {
 
             ?>
             
-            <div id="modal" class="modal fade">
+            <!-- <div id="modal" class="modal fade">
                 <div class="modal-dialog">
-                    <form method="post" id="formid">
+                    <form method="post" id="formid" action="grid_actions.php" enctype="multipart/form-data">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h4 class="modal-title"><i class="fa fa-plus"></i> Edit</h4>
                             </div>
                             <div class="modal-body">
                                 <label for="multiple_file_input" class="form-label">Multiple files input</label>
-                                <input class="form-control" type="file" id="multiple_file_input" name="files[]" multiple />
+                                <input class="form-control" type="file" id="multiple_file_input" name="image_gallery[]" multiple="multiple"/>
                             </div>
                             <div class="modal-footer">
                                 <input type="hidden" name="modal_id" id="modal_id" />
                                 <input type="hidden" name="action" id="action" value="update" />
-                                <input type="submit" name="save" id="upload_from_grid" class="btn btn-outline-secondary" value="Upload" />
+                                <input type="submit" name="save" ip="upld" class="btn btn-outline-secondary" value="Upload" />
                                 <button type="button" class="btn btn-default" data-dismiss="modal" id="modal_close">Close</button>
-                            </div>
+                            </div>  
                         </div>
                     </form>
                 </div>
-            </div>
+            </div> -->
 
             <?php //include 'footer.php' ?>
         
@@ -183,8 +193,9 @@ if($result = fetchDataById($id)) {
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
-        <script src="js/scripts.js"></script>
         <script src="js/grid_details.js"></script>
+        <!-- <script src="js/scripts.js"></script> -->
+        
         <script src="js/toastr.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
