@@ -68,6 +68,53 @@ $(function() {
 
 
 
+    $(document).on('submit','#formid', function(event){
+		event.preventDefault();
+		$('#save').attr('disabled','disabled');
+		var formData = $(this).serialize();
+        console.log(formData);
+		$.ajax({
+			url:"./grid_controller.php",
+			method:"POST",
+			data:formData,
+			success:function(data){				
+				//console.log(data);
+                $('#formid')[0].reset();
+				$('#modal').modal('hide');				
+				$('#save').attr('disabled', false);
+                window.location.reload();
+			}
+		})
+	});	
+
+
+
+    $(document).on('click', '.item_update', function(){
+		var lineid = $(this).attr("id");
+        var action = "fetch_single_line_item";
+        $('.modal-title').html("<i class='fa fa-plus'></i> Update Crop Type");
+		$.ajax({
+			url:'./grid_controller.php',
+			method:"POST",
+			data:{lineid:lineid, action:action},
+			success:function(data){
+				console.log(data);
+                dt = JSON.parse(data);
+                //console.log(dt);
+				$('#modal').modal('show');
+                $('#lineid').val(dt.Id);
+                $('#descr').val(dt.Description);		
+				$('#action').val('update_line_item');
+				$('#save').val('Update');
+			},
+            error: function (request, error) {
+                console.log(arguments);
+                console.log(" Can't do because: " + error);
+            }
+		})
+	});
+
+
     $(document).on('click', '.item_delete', function(){
         var id = $(this).attr("id");
 

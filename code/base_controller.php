@@ -9,6 +9,7 @@ $allowed_files = array('pdf', 'doc', 'docx');
 $upload_files = array();
 $upload_images = array();
 $path = 'uploads/'; // upload directory
+$attached_title = array();
 
 $title = $_POST['title'];
 $desc = $_POST['desc'];
@@ -17,49 +18,41 @@ $threedurl2 = $_POST['threedurl2'];
 $additionalinfourl = $_POST['additionalinfourl'];
 $option1 = $_POST['option1'];
 $option2 = $_POST['option2'];
-//$files = $_POST['formFileMultiple'];
 $f = $_FILES['files']['name'];
+$no_files = count($f);
 
-$data_id = insert_data($title, $desc, $threedurl1, $threedurl2, $additionalinfourl, $option1, $option2);
-//$f = array();
-//$f = explode(";", json_decode($files)); //array_filter([$_FILES['file']['name']]);
-
-//var_dump($f);
-
-foreach($f as $fh) {
-	$ext = pathinfo($fh, PATHINFO_EXTENSION);
-	if (in_array($ext, $allowed_files)) {
-		array_push($upload_files, $fh);
-	} else {
-		array_push($upload_images, $fh);
-	}
+for($i = 0; $i < $no_files; $i++) {
+	$index = 'desc' . ($i+1);
+	array_push($attached_title, $_POST[$index]);
 }
 
-// var_dump($upload_files);
-// echo "<br/>";
-// var_dump($upload_images);
-// echo "<br/>";
+$data_id = insert_data($title, $desc, $threedurl1, $threedurl2, $additionalinfourl, $option1, $option2);
+
+
+foreach($f as $key=>$fh) {
+	$ext = pathinfo($fh, PATHINFO_EXTENSION);
+	if (in_array($ext, $allowed_files)) {
+		insert_data_files($data_id, 1, 'uploads/' . $fh, $attached_title[$key]);
+		//array_push($upload_files, $fh);
+	} else {
+		insert_data_files($data_id, 2, 'uploads/' . $fh, $attached_title[$key]);
+		//array_push($upload_images, $fh);
+	}
+}
 
 $upload_files_processed = array_map('add_const_to_string', $upload_files);
 $upload_images_processed = array_map('add_const_to_string', $upload_images);
 
-// var_dump($upload_files_processed);
-// echo "<br/>";
-// var_dump($upload_images_processed);
+// foreach($upload_files_processed as $key=>$file)
+// {
+// 	insert_data_files($data_id, 1, $file, $attached_title[$key]);
+// }
 
-foreach($upload_files_processed as $file)
-{
-	//var_dump($file);
-	insert_data_files($data_id, 1, $file);
-}
+// foreach($upload_images_processed as $key=>$image)
+// {
+// 	insert_data_files($data_id, 2, $image);
+// }
 
-foreach($upload_images_processed as $image)
-{
-	//var_dump($image);
-	insert_data_files($data_id, 2, $image);
-}
-
-$no_files = count($f);
 for ($i = 0; $i < $no_files; $i++) {
 	$tmpname = $_FILES["files"]["tmp_name"][$i];
 	$name = $_FILES["files"]["name"][$i];
@@ -73,6 +66,8 @@ for ($i = 0; $i < $no_files; $i++) {
 		echo 'File successfully uploaded :' . $path . $name . ' ';
 	}
 }
+
+echo 'ok';
 //======================================================================================
 
 

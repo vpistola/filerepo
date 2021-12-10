@@ -156,21 +156,62 @@ function fetchDataFiles($id_ref)
 }
 
 
+function fetch_single_data_file($id_ref) 
+{
+    global $pdo;
+    $id = $id_ref;
+    $row = array();
+    $sql = "select * from DataFiles where Id=:id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+    
+    try {
+        $stmt->execute();
+        $row = $stmt->fetch();
+    } catch(PDOException $err) {
+        echo $err->getMessage();
+    }
+
+    return json_encode($row);
+}
+
+
+
+function update_single_data_file($id_ref, $descr_ref) 
+{
+    global $pdo;
+    $id = $id_ref;
+    $descr = $descr_ref;
+    $row = array();
+    $sql = "UPDATE DataFiles set Description = :descr where Id=:id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+    $stmt->bindParam(":descr", $descr, PDO::PARAM_STR);
+    
+    try {
+        $stmt->execute();
+    } catch(PDOException $err) {
+        echo $err->getMessage();
+    }
+}
+
 
 //========================Functions for Data Files========================
 
-function insert_data_files($dataid_ref, $typeid_ref, $file_ref)
+function insert_data_files($dataid_ref, $typeid_ref, $file_ref, $descr_ref)
 {
     global $pdo;
     $dataid = $dataid_ref;
     $typeid = $typeid_ref;
     $file = $file_ref;
+    $descr = $descr_ref;
     
-    $sql = "INSERT INTO DataFiles(DataId, TypeId, JsonData) VALUES(:dataid, :typeid, :uploadedfile)";
+    $sql = "INSERT INTO DataFiles(DataId, TypeId, JsonData, Description) VALUES(:dataid, :typeid, :uploadedfile, :descr)";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(":dataid", $dataid, PDO::PARAM_INT);
     $stmt->bindParam(":typeid", $typeid, PDO::PARAM_INT);
     $stmt->bindParam(":uploadedfile", $file, PDO::PARAM_STR);
+    $stmt->bindParam(":descr", $descr, PDO::PARAM_STR);
 
     try {
         $stmt->execute();

@@ -99,7 +99,10 @@ $(function() {
 
 
     $('#upload').click(function() {
-        event.preventDefault();    
+        event.preventDefault();
+        var attached_descriptions = [];
+        
+
         const selectedFiles = document.getElementById('formFileMultiple').files;
         //console.log(selectedFiles);
         for (var i = 0; i < selectedFiles.length; i++) {
@@ -140,7 +143,11 @@ $(function() {
         form_data.append('option1', option1);
         form_data.append('option2', option2);
     
-        //console.log(form_data);
+        var num_of_files = file_data.length;
+        for(let i = 0; i < num_of_files; i++) {
+            var desc = $('#desc' + i).val();
+            form_data.append('desc' + (i+1), desc);
+        }
         
         $.ajax({
             url: './base_controller.php',
@@ -244,8 +251,12 @@ $(function() {
         var filelist = $('#filelist');
         var html = 'Selected Files : ' + "<br/>";
         for(let i = 0; i < selectedFiles.length; i++) {
+            var desc_input = "<div class='form-inline col-md-6' style='margin-bottom: 10px'>" +
+                "<label class='form-label'>Please write a description for the above file</label>" +
+                "<input type='text' class='form-control' id='desc" + i + "' name='desc" + i + "'>" + 
+                "</div>";
             el = selectedFiles[i];
-            html += (i + 1) + ". " + el.name + "<br/>";
+            html += (i + 1) + ". " + el.name + desc_input + "<br/>";
         }
         filelist.html(html);
         filelist.css('font-size', '14px');

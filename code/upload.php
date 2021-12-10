@@ -87,7 +87,7 @@ if (!$loggedin) {
 
                 <div class="form-inline col-md-6" style="margin-bottom: 10px">
                     <label for="formFileMultiple" class="form-label">Multiple files input</label>
-                    <input class="form-control" type="file" id="\" name="files[]" multiple />
+                    <input class="form-control" type="file" id="formFileMultiple" name="files[]" multiple />
                 </div>
 
                 <div class="form-inline col-md-6" style="margin-bottom: 10px">

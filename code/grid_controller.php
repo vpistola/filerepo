@@ -17,7 +17,17 @@
 	}
 
 
+	if(!empty($_POST['action']) && $_POST['action'] == 'fetch_single_line_item') {
+		$dfid = $_POST['lineid'];
+		echo fetch_single_data_file($dfid);
+	}
+
     
+	if(!empty($_POST['action']) && $_POST['action'] == 'update_line_item') {
+		$dfid = $_POST['lineid'];
+		$descr = $_POST['descr'];
+		echo update_single_data_file($dfid, $descr);
+	}
 
 
     function a() {

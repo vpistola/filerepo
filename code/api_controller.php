@@ -25,7 +25,7 @@ function fetch()
         //$tmp = array();
         //$tmp = $row;
         $id = $row['Id'];
-        $r = fetchDataFiles($id);
+        $r['dt'] = fetchDataFiles($id);
         //array_push($tmp, $r);
         $merge = array_merge($row, $r);
         array_push($resp, $merge);

@@ -137,6 +137,7 @@ if($result = fetchDataById($id)) {
             echo "<thead>";
             echo "<tr>";
             echo "<th>#</th>";
+            echo "<th>Description</th>";
             echo "<th>File</th>";
             echo "<th>Actions</th>";
             echo "</tr>";
@@ -147,8 +148,10 @@ if($result = fetchDataById($id)) {
                 foreach ($result as $row) {
                     echo "<tr>";
                     echo "<td style='width:7%'>" . $row['Id'] . "</td>";
+                    echo "<td>" . $row['Description'] . "</td>";
                     echo "<td>" . $row['JsonData'] . "</td>"; ?>
                     <td style='width: 7%'><div style='display: flex;'>
+                        <button type="button" name="update" id="<?php echo $row['Id']; ?>" class="btn btn-xs item_update" ><i class="fa fa-edit" aria-hidden="true"></i></button>
                         <button type="button" name="delete" id="<?php echo $row['Id']; ?>" class="btn btn-xs item_delete" ><i class="fa fa-trash" aria-hidden="true"></i></button></div>
                     </td>
                     
@@ -158,19 +161,21 @@ if($result = fetchDataById($id)) {
 
             ?>
             
-            <!-- <div id="modal" class="modal fade">
+            <div id="modal" class="modal fade">
                 <div class="modal-dialog">
-                    <form method="post" id="formid" action="grid_actions.php" enctype="multipart/form-data">
+                    <form method="post" id="formid" action="" enctype="multipart/form-data">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h4 class="modal-title"><i class="fa fa-plus"></i> Edit</h4>
                             </div>
                             <div class="modal-body">
-                                <label for="multiple_file_input" class="form-label">Multiple files input</label>
-                                <input class="form-control" type="file" id="multiple_file_input" name="image_gallery[]" multiple="multiple"/>
+                                <div class="form-group">
+                                    <label for="name" class="col-form-label">Description*</label>
+                                    <input type="text" class="form-control" id="descr" name="descr" required>
+                                </div>
                             </div>
                             <div class="modal-footer">
-                                <input type="hidden" name="modal_id" id="modal_id" />
+                                <input type="hidden" name="lineid" id="lineid"/>
                                 <input type="hidden" name="action" id="action" value="update" />
                                 <input type="submit" name="save" ip="upld" class="btn btn-outline-secondary" value="Upload" />
                                 <button type="button" class="btn btn-default" data-dismiss="modal" id="modal_close">Close</button>
@@ -178,7 +183,7 @@ if($result = fetchDataById($id)) {
                         </div>
                     </form>
                 </div>
-            </div> -->
+            </div>
 
             <?php //include 'footer.php' ?>
         
