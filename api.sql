@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Dec 08, 2021 at 01:15 PM
+-- Generation Time: Dec 10, 2021 at 12:28 PM
 -- Server version: 5.7.35
 -- PHP Version: 7.4.22
 
@@ -43,10 +43,9 @@ CREATE TABLE `Data` (
 --
 
 INSERT INTO `Data` (`Id`, `Title`, `Description`, `3durl1`, `3durl2`, `AdditionalInfoUrl`, `Option1`, `Option2`) VALUES
-(6, 'ww', 'wwaffdasgfsdfsdf', 'ww', 'ww', 'ww', '1', '1'),
-(7, 'ww', 'ww', 'ww', 'ww', 'ww', '2', '1'),
-(8, 'ww', 'ww', 'ww', 'ww', 'ww', '2', '2'),
-(9, 'rr', 'rr', 'rr', 'rr', 'rr', '1', '1');
+(10, 'This project must hopefully end!', 'This project must hopefully end!', 'This project must hopefully end!', 'This project must hopefully end!', 'This project must hopefully end!', '2', '1'),
+(13, 'php', 'php', 'php', 'php', 'php', '1', '1'),
+(17, 'Test title', 'Test description', 'www.google.gr', 'www.in.gr', 'www.yahoo.gr', '1', '2');
 
 -- --------------------------------------------------------
 
@@ -58,20 +57,20 @@ CREATE TABLE `DataFiles` (
   `Id` int(11) NOT NULL,
   `DataId` int(11) NOT NULL,
   `TypeId` int(11) NOT NULL,
-  `JsonData` text
+  `JsonData` text,
+  `Description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `DataFiles`
 --
 
-INSERT INTO `DataFiles` (`Id`, `DataId`, `TypeId`, `JsonData`) VALUES
-(9, 6, 1, 'uploads/declaration.pdf'),
-(10, 6, 2, 'uploads/disease_classification.jpg'),
-(11, 7, 1, 'uploads/1.docx'),
-(12, 8, 1, 'uploads/1.docx'),
-(13, 9, 1, 'uploads/t.docx'),
-(16, 6, 1, 'uploads/aromatika.docx');
+INSERT INTO `DataFiles` (`Id`, `DataId`, `TypeId`, `JsonData`, `Description`) VALUES
+(23, 10, 2, 'uploads/disease_classification.jpg', 'disease classification'),
+(24, 10, 2, 'uploads/pest_detection.jpg', 'pest detection'),
+(29, 13, 1, 'uploads/Run Applications Kubernetes.pdf', 'Run Applications Kubernetes'),
+(34, 17, 2, 'uploads/Untitled.jpg', 'This is an image'),
+(35, 17, 1, 'uploads/Web-services-proposal.pdf', 'This is a proposal');
 
 -- --------------------------------------------------------
 
@@ -149,13 +148,13 @@ ALTER TABLE `Users`
 -- AUTO_INCREMENT for table `Data`
 --
 ALTER TABLE `Data`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `DataFiles`
 --
 ALTER TABLE `DataFiles`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `FileType`
