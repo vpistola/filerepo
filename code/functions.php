@@ -136,6 +136,66 @@ function fetchData()
 }
 
 
+function delete_data_entry($id_ref) 
+{
+    global $pdo;
+    $id = $id_ref;
+    $sql = "delete from Data where Id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+
+    try {
+        $stmt->execute();
+    } catch (PDOException $err) {
+        echo $err->getMessage();
+    }
+}
+
+
+
+//========================Functions for Data Files========================
+
+function insert_data_files($dataid_ref, $typeid_ref, $file_ref, $descr_ref)
+{
+    global $pdo;
+    $dataid = $dataid_ref;
+    $typeid = $typeid_ref;
+    $file = $file_ref;
+    $descr = $descr_ref;
+    
+    $sql = "INSERT INTO DataFiles(DataId, TypeId, JsonData, Description) VALUES(:dataid, :typeid, :uploadedfile, :descr)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(":dataid", $dataid, PDO::PARAM_INT);
+    $stmt->bindParam(":typeid", $typeid, PDO::PARAM_INT);
+    $stmt->bindParam(":uploadedfile", $file, PDO::PARAM_STR);
+    $stmt->bindParam(":descr", $descr, PDO::PARAM_STR);
+
+    try {
+        $stmt->execute();
+        $retid = $pdo->lastInsertId();
+    } catch(PDOException $err) {
+        echo $err->getMessage();
+    }
+
+    return $retid;
+}
+
+function delete_file() 
+{
+    global $pdo;
+    $id = $_POST['id'];
+    $sql = "delete from DataFiles where Id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+
+    try {
+        $stmt->execute();
+    } catch (PDOException $err) {
+        echo $err->getMessage();
+    }
+}
+
+
 function fetchDataFiles($id_ref) 
 {
     global $pdo;
@@ -191,49 +251,6 @@ function update_single_data_file($id_ref, $descr_ref)
     try {
         $stmt->execute();
     } catch(PDOException $err) {
-        echo $err->getMessage();
-    }
-}
-
-
-//========================Functions for Data Files========================
-
-function insert_data_files($dataid_ref, $typeid_ref, $file_ref, $descr_ref)
-{
-    global $pdo;
-    $dataid = $dataid_ref;
-    $typeid = $typeid_ref;
-    $file = $file_ref;
-    $descr = $descr_ref;
-    
-    $sql = "INSERT INTO DataFiles(DataId, TypeId, JsonData, Description) VALUES(:dataid, :typeid, :uploadedfile, :descr)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(":dataid", $dataid, PDO::PARAM_INT);
-    $stmt->bindParam(":typeid", $typeid, PDO::PARAM_INT);
-    $stmt->bindParam(":uploadedfile", $file, PDO::PARAM_STR);
-    $stmt->bindParam(":descr", $descr, PDO::PARAM_STR);
-
-    try {
-        $stmt->execute();
-        $retid = $pdo->lastInsertId();
-    } catch(PDOException $err) {
-        echo $err->getMessage();
-    }
-
-    return $retid;
-}
-
-function delete_file() 
-{
-    global $pdo;
-    $id = $_POST['id'];
-    $sql = "delete from DataFiles where Id = :id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-
-    try {
-        $stmt->execute();
-    } catch (PDOException $err) {
         echo $err->getMessage();
     }
 }

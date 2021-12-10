@@ -180,6 +180,30 @@ _END;
                 var id = $(this).attr("id");
                 window.location.href = './grid_details.php?id=' + id;
             });
+
+            $(document).on('click', '.delete', function(){
+                var id = $(this).attr("id");
+
+                var data = {
+                    id: id,
+                    action: "delete_data_entry"
+                };
+
+                if(confirm("Are you sure you want to delete this record?")) {
+                    $.ajax({
+                        url:"./grid_controller.php",
+                        method:"POST",
+                        data: data,
+                        success:function(data) {
+                            //console.log(data);
+                            window.location.reload();
+                        }
+                    });
+                } else {
+                    return false;
+                }
+
+            });	
         </script>
     </body>
 </html>

@@ -11,6 +11,11 @@
     if(!empty($_POST['action']) && $_POST['action'] == 'delete_file') {
 		echo delete_file();
 	}
+	
+	if(!empty($_POST['action']) && $_POST['action'] == 'delete_data_entry') {
+		$id = $_POST['id'];
+		echo delete_data_entry($id);
+	}
 
     if(!empty($_POST['action']) && $_POST['action'] == 'upload') {
 		//echo a();
