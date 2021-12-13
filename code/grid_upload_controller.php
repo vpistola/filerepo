@@ -38,13 +38,13 @@ $upload_images_processed = array_map('add_const_to_string', $upload_images);
 foreach($upload_files_processed as $file)
 {
     //var_dump($file);
-    insert_data_files($recordid, 1, $file);
+    insert_data_files($recordid, 1, $file, "");
 }
 
 foreach($upload_images_processed as $image)
 {
     //var_dump($image);
-    insert_data_files($recordid, 2, $image);
+    insert_data_files($recordid, 2, $image, "");
 }
 
 //$files = array_filter($_FILES['files']['name']);

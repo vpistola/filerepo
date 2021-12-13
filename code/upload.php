@@ -30,49 +30,56 @@ if (!$loggedin) {
                 <div class="form-row">
                     <div class="form-group col-md-6" style="margin-bottom: 10px">
                         <label for="inputEmail4">Title</label>
-                        <input type="text" class="form-control" id="title" name="title" placeholder="Title">
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Title" required/>
+                        <span class="error" id="title_error" aria-live="polite"></span>
                     </div>
                     
                     <div class="form-group col-md-6" style="margin-bottom: 10px">
                         <label for="desc">Description</label>
                         <!-- <input type="text" class="form-control" id="desc" name="desc" placeholder="Password"> -->
-                        <textarea class="form-control" id="desc" name="desc" rows="6"></textarea>  
+                        <textarea class="form-control" id="desc" name="desc" rows="6" required></textarea>  
+                        <span class="error" id="desc_error" aria-live="polite"></span>
                     </div>
 
                     <div class="form-group col-md-6" style="margin-bottom: 10px">
                         <label for="3durl">3D-URL 1</label>
-                        <input type="text" class="form-control" id="3durl1" name="3durl1" placeholder="3D-URL">
+                        <input type="text" class="form-control" id="3durl1" name="3durl1" placeholder="3D-URL" required>
+                        <span class="error" id="threedurl1_error" aria-live="polite"></span>
                     </div>
 
                     <div class="form-group col-md-6" style="margin-bottom: 10px">
                         <label for="3durl">3D-URL 2</label>
-                        <input type="text" class="form-control" id="3durl2" name="3durl2" placeholder="3D-URL">
+                        <input type="text" class="form-control" id="3durl2" name="3durl2" placeholder="3D-URL" required>
+                        <span class="error" id="threedurl2_error" aria-live="polite"></span>
                     </div>
                     
                     <div class="form-group col-md-6" style="margin-bottom: 10px">
                         <label for="additionalinfourl">Additional Info URL</label>
-                        <input type="text" class="form-control" id="additionalinfourl" name="additionalinfourl" placeholder="Additional-Info-URL">
+                        <input type="text" class="form-control" id="additionalinfourl" name="additionalinfourl" placeholder="Additional-Info-URL" required>
+                        <span class="error" id="additionalinfourl_error" aria-live="polite"></span>
                     </div>
                 </div>
                 
                 <div class="form-inline col-md-6" style="margin-bottom: 10px">
                     <label for="option1">Option1</label>
-                    <select class="form-control" id="option1" name="option1">
+                    <select class="form-control" id="option1" name="option1" required>
                         <option selected>Choose...</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
                         <option value="3">Three</option>
                     </select>
+                    <span class="error" id="option1_error" aria-live="polite"></span>
                 </div>
 
                 <div class="form-inline col-md-6" style="margin-bottom: 10px">
                     <label for="option2">Option2</label>
-                    <select class="form-control" id="option2" name="option2">
+                    <select class="form-control" id="option2" name="option2" required>
                         <option selected>Choose...</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
                         <option value="3">Three</option>
                     </select>
+                    <span class="error" id="option2_error" aria-live="polite"></span>
                 </div>
 
                 <!-- <div class="form-inline col-md-6" style="margin-bottom: 10px">
@@ -106,12 +113,14 @@ if (!$loggedin) {
 
         </div>
         
-
+        
         <script src="js/jquery.min.js"></script>
+        <!-- <script src="js/check_validation.js"></script> -->
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
-        <script src="js/scripts.js"></script>
+        <script src="js/scripts_validation.js"></script>
+        
         <script src="js/toastr.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
