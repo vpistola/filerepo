@@ -72,7 +72,7 @@ _END;
                     // echo "<td>" . $row['JsonData'] . "</td>"; ?>
                     <td><div style="display:flex">
                         <button type="button" name="update" id="<?php echo $row['Id']; ?>" class="btn btn-xs update" ><i class="fa fa-pencil-alt" aria-hidden="true"></i></button>
-                        <button type="button" name="delete" id="<?php echo $row['Id']; ?>" class="btn btn-xs delete" ><i class="fa fa-trash" aria-hidden="true"></i></button></div>
+                        <button type="button" name="delete" id="<?php echo $row['Id']; ?>" class="btn btn-xs grid-entry-delete" ><i class="fa fa-trash" aria-hidden="true"></i></button></div>
                     </td>
                     
             <?php  echo "</tr>";
@@ -181,7 +181,7 @@ _END;
                 window.location.href = './grid_details.php?id=' + id;
             });
 
-            $(document).on('click', '.delete', function(){
+            $(document).on('click', '.grid-entry-delete', function(){
                 var id = $(this).attr("id");
 
                 var data = {
@@ -195,8 +195,8 @@ _END;
                         method:"POST",
                         data: data,
                         success:function(data) {
-                            //console.log(data);
-                            window.location.reload();
+                            console.log(data);
+                            //window.location.reload();
                         }
                     });
                 } else {

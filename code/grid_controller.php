@@ -9,11 +9,18 @@
 	}
 
     if(!empty($_POST['action']) && $_POST['action'] == 'delete_file') {
+		$filename = fetch_single_data_file_descr();
+		echo delete_file_from_server($filename);
 		echo delete_file();
 	}
 	
 	if(!empty($_POST['action']) && $_POST['action'] == 'delete_data_entry') {
 		$id = $_POST['id'];
+		$files_array = array();
+		$files_array = fetch_data_files_descr();
+		foreach($files_array as $f) {
+			echo delete_file_from_server($f['JsonData']);
+		}
 		echo delete_data_entry($id);
 	}
 

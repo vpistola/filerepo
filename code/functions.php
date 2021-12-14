@@ -153,6 +153,7 @@ function delete_data_entry($id_ref)
 
 
 
+
 //========================Functions for Data Files========================
 
 function insert_data_files($dataid_ref, $typeid_ref, $file_ref, $descr_ref)
@@ -236,6 +237,46 @@ function fetch_single_data_file($id_ref)
 }
 
 
+function fetch_single_data_file_descr() 
+{
+    global $pdo;
+    $id = $_POST['id'];
+    $row = array();
+    $sql = "select JsonData from DataFiles where Id=:id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+    
+    try {
+        $stmt->execute();
+        $row = $stmt->fetch();
+    } catch(PDOException $err) {
+        echo $err->getMessage();
+    }
+
+    return $row['JsonData'];
+}
+
+
+function fetch_data_files_descr() 
+{
+    global $pdo;
+    $dataid = $_POST['id'];
+    $data = array();
+    $sql = "select JsonData from DataFiles where DataId=:dataid";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(":dataid", $dataid, PDO::PARAM_INT);
+    
+    try {
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+    } catch(PDOException $err) {
+        echo $err->getMessage();
+    }
+
+    return $data;
+}
+
+
 
 function update_single_data_file($id_ref, $descr_ref) 
 {
@@ -253,6 +294,19 @@ function update_single_data_file($id_ref, $descr_ref)
     } catch(PDOException $err) {
         echo $err->getMessage();
     }
+}
+
+
+function delete_file_from_server($filename)
+{
+    $res = '';
+    if (unlink($filename)) {
+        $res = 'The file ' . $filename . ' was deleted successfully!';
+    } else {
+        $res = 'There was a error deleting the file ' . $filename;
+    }
+
+    return $res;
 }
 
 //========================End of Functions for Data Files========================
