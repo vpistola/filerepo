@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS DataFiles (
     DataId int not null,
     TypeId int not null,
     JsonData text,
+    Description text,
     CONSTRAINT fk_data_id FOREIGN KEY (DataId)  
     REFERENCES Data(Id)  
     ON DELETE CASCADE  
@@ -49,3 +50,47 @@ CREATE TABLE IF NOT EXISTS DataFiles (
     <a href="#" class="btn btn-primary">Go somewhere</a>
   </div>
 </div> -->
+
+
+
+https://www.makeuseof.com/implement-form-validation-javascript/
+
+=================================================================
+<input type="checkbox" id="terms">
+<label for="terms">I agree to the terms and conditions</label>
+const terms = document.getElementById('terms');
+if (!terms.checked) {
+  alert('Please agree to the terms and conditions to proceed further.');
+}
+=================================================================
+
+
+
+=================================================================
+<label for="male">Male</label>
+<input type="radio" id="male" name="gender" value="male" />
+<label for="female">Female</label>
+<input type="radio" id="female" name="gender" value="female" />
+<label for="others">Others</label>
+<input type="radio" id="others" name="gender" value="others" />
+const genders = document.getElementsByName("gender");
+const validForm = false;
+let i = 0;
+while (!validForm && i < radios.length) {
+  if (radios[i].checked) validForm = true;
+  i++;        
+}
+if (!validForm) alert("Must check some option!");
+=================================================================
+
+
+
+
+=================================================================
+<input type="email" placeholder="email@example.io" id="email" required />
+const emailInput = document.getElementById('email');
+const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+if (!emailInput.value.match(emailRegex)) {
+  alert('Invalid email address.');
+}
+=================================================================
