@@ -62,8 +62,10 @@ function onFormSubmission(el, elError) {
     var element = document.getElementById(el);
     var elementError = document.getElementById(elError);
     // if the title field isn't valid, we don't let the form submit
+    //alert('element : ' + element.validity.valid + ' and elementError : ' + elementError);
     if(!element.validity.valid) {
         // If it isn't, we display an appropriate error message
+        //alert('element : ' + element + ' and elementError : ' + elementError);
         showError(element, elementError);
         // Then we prevent the form from being sent by canceling the event
         // e.preventDefault();
@@ -125,7 +127,9 @@ $(function() {
         var attached_descriptions = [];
         
         for (const [key, value] of elementsMap) {
+            //alert(key, value);
             if (!onFormSubmission(key, value)) {
+                //alert(key, value);
                 return;
             }
         }
